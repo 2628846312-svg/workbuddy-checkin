@@ -2,12 +2,15 @@ name: workbuddy-checkin
 
 on:
   schedule:
-    - cron: '17 1 * * *'    # 北京时间每天 09:17
-    - cron: '23 12 * * *'   # 北京时间每天 20:23（兜底，脚本幂等不会重复领）
-  workflow_dispatch: {}      # 允许手动触发测试
+    - cron: '*/30 0-14 * * *'   # 每 30 分钟一次（北京时间 08:00-22:59），脚本幂等自动去重
+  workflow_dispatch: {}
 
 permissions:
   contents: read
+
+concurrency:
+  group: checkin
+  cancel-in-progress: false
 
 jobs:
   checkin:
